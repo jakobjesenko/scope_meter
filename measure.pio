@@ -1,0 +1,27 @@
+
+.program measure
+    pull block
+    out y, 32
+    wait 0 pin 0
+    wait 1 pin 0
+loop:
+    mov x pins
+    in x, 1
+    mov x isr
+    jmp !x end
+    jmp y-- loop
+end:
+    in y, 32
+    push
+
+% c-sdk {
+
+void measure_program_init(PIO pio, uint sm, uint offset, uint pin) {
+   pio_gpio_init(pio, pin);
+   pio_sm_set_consecutive_pindirs(pio, sm, pin, 1, true);
+   pio_sm_config c = measure_program_get_default_config(offset);
+   sm_config_set_set_pins(&c, pin, 1);
+   pio_sm_init(pio, sm, offset, &c);
+   pio_sm_set_enabled(pio, sm, true);
+}
+%}
